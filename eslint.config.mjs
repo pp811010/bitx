@@ -11,6 +11,13 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    rules: {
+      "no-console": "off",  // อนุญาตให้ใช้ console.log ได้
+      "react/prop-types": "off", // ปิดการเตือนเรื่อง prop-types ใน React
+      "@next/next/no-img-element": "off", // อนุญาตให้ใช้ <img> แทน <Image> ของ Next.js
+    },
+  },
 ];
 
 export default eslintConfig;

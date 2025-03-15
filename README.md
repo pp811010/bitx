@@ -12,7 +12,7 @@ BitX เป็นแพลตฟอร์มที่ช่วยให้ผู
 - **Lucide Icons** - สำหรับไอคอนแบบ SVG
 
 ### Backend
-- **Next.js API Routes** - ใช้เป็น backend API
+- **Next.js** - ใช้เป็น Fetching Data in Client Components
 - **Prisma** - ORM สำหรับจัดการฐานข้อมูล
 - **Supabase** - ใช้แทน Firebase สำหรับ authentication และฐานข้อมูล
 
@@ -24,13 +24,13 @@ BitX เป็นแพลตฟอร์มที่ช่วยให้ผู
 ## Getting Started
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-repo/bitx.git
+git clone https://github.com/pp811010/bitx.git
 cd bitx
 ```
 
 ### 2. Install Dependencies
 ```bash
-npm install  # or yarn install
+pnpm i  # or yarn install
 ```
 
 ### 3. Set Up Environment Variables
@@ -44,38 +44,29 @@ NEXT_PUBLIC_STRIPE_KEY="your_stripe_api_key"
 
 ### 4. Run Development Server
 ```bash
-npm run dev  # or yarn dev
+pnpm run dev  # or yarn dev or npm run dev
 ```
 เปิดเบราว์เซอร์ที่ [http://localhost:3000](http://localhost:3000) เพื่อดูผลลัพธ์
 
-<!-- ## Deployment
-แนะนำให้ใช้ [Vercel](https://vercel.com/) ในการ Deploy:
-```bash
-vercel
-``` -->
+## Troubleshooting
+### 1. ปัญหา "Module Not Found" หรือ "Cannot find module '.prisma/client/default'"
+- ตรวจสอบให้แน่ใจว่า Prisma Client ถูกติดตั้ง:
+  ```bash
+  pnpm list @prisma/client
+  ```
+  ถ้ายังไม่มีให้ติดตั้ง:
+  ```bash
+  pnpm add @prisma/client
+  ```
+- รันคำสั่ง generate Prisma Client:
+  ```bash
+  pnpm prisma generate
+  ```
+- หากยังมีปัญหา ลองลบ `node_modules` และติดตั้งใหม่:
+  ```bash
+  rm -rf node_modules .prisma
+  pnpm install
+  pnpm prisma generate
+  ```
 
-<!-- ## Troubleshooting
-### 1. ปัญหา "Module Not Found"
-- ตรวจสอบให้แน่ใจว่า `paths` ใน `tsconfig.json` ถูกตั้งค่าให้รองรับ alias path
-```json
-"paths": {
-  "@/*": ["./*"]
-}
-```
-- ลองลบ `.next` แล้วรันใหม่
-```bash
-rm -rf .next && npm run dev
-```
 
-### 2. ปัญหาการเชื่อมต่อ Database
-- ตรวจสอบว่า `DATABASE_URL` ถูกต้องและสามารถเข้าถึง Supabase ได้
-
-### 3. ปัญหา Authentication (Clerk API)
-- ตรวจสอบให้แน่ใจว่า Clerk API Key ถูกต้องและใช้งานในโหมดที่รองรับ
-
-## Contributors
-- [Your Name](https://github.com/your-profile)
-
-## License
-This project is licensed under the MIT License.
- -->

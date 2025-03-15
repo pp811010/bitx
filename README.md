@@ -1,56 +1,81 @@
-<<<<<<< HEAD
 # BitX
-=======
-ไฟล์ .env
 
+## Overview
+BitX เป็นแพลตฟอร์มที่ช่วยให้ผู้ใช้สามารถติดตามและวิเคราะห์ราคาสินทรัพย์ดิจิทัลแบบเรียลไทม์ พร้อมทั้งมีระบบการยืนยันตัวตน และการชำระเงินผ่าน Stripe
 
-DATABASE_URL="postgresql://postgres.hhmzmaeigcugjddqseck:pp811010_Za@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+## Technologies Used
+### Frontend
+- **Next.js** - เฟรมเวิร์กที่ช่วยจัดการ UI และการโหลดข้อมูล
+- **React.js** - ไลบรารีสำหรับสร้าง UI
+- **TypeScript** - ป้องกันข้อผิดพลาดของโค้ด
+- **Tailwind CSS** - ช่วยจัดการสไตล์ของ UI
+- **Lucide Icons** - สำหรับไอคอนแบบ SVG
 
+### Backend
+- **Next.js API Routes** - ใช้เป็น backend API
+- **Prisma** - ORM สำหรับจัดการฐานข้อมูล
+- **Supabase** - ใช้แทน Firebase สำหรับ authentication และฐานข้อมูล
 
-DIRECT_URL="postgresql://postgres.hhmzmaeigcugjddqseck:pp811010_Za@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
-
------------------------------------
-
-
-        
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+### APIs
+- **CoinGecko API** - ดึงข้อมูลราคาคริปโตแบบเรียลไทม์
+- **Stripe API** - ใช้สำหรับการชำระเงิน
+- **Clerk API** - สำหรับระบบ Authentication
 
 ## Getting Started
-
-First, run the development server:
-
+### 1. Clone the Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-repo/bitx.git
+cd bitx
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install Dependencies
+```bash
+npm install  # or yarn install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Set Up Environment Variables
+สร้างไฟล์ `.env.local` และกำหนดค่าต่อไปนี้(ดูค่า env ในรายงาน):
+```env
+DATABASE_URL="your_database_url"
+DIRECT_URL="your_direct_database_url"
+NEXT_PUBLIC_COIN_API="your_coingecko_api_key"
+NEXT_PUBLIC_STRIPE_KEY="your_stripe_api_key"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Run Development Server
+```bash
+npm run dev  # or yarn dev
+```
+เปิดเบราว์เซอร์ที่ [http://localhost:3000](http://localhost:3000) เพื่อดูผลลัพธ์
 
-## Learn More
+<!-- ## Deployment
+แนะนำให้ใช้ [Vercel](https://vercel.com/) ในการ Deploy:
+```bash
+vercel
+``` -->
 
-To learn more about Next.js, take a look at the following resources:
+<!-- ## Troubleshooting
+### 1. ปัญหา "Module Not Found"
+- ตรวจสอบให้แน่ใจว่า `paths` ใน `tsconfig.json` ถูกตั้งค่าให้รองรับ alias path
+```json
+"paths": {
+  "@/*": ["./*"]
+}
+```
+- ลองลบ `.next` แล้วรันใหม่
+```bash
+rm -rf .next && npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. ปัญหาการเชื่อมต่อ Database
+- ตรวจสอบว่า `DATABASE_URL` ถูกต้องและสามารถเข้าถึง Supabase ได้
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. ปัญหา Authentication (Clerk API)
+- ตรวจสอบให้แน่ใจว่า Clerk API Key ถูกต้องและใช้งานในโหมดที่รองรับ
 
-## Deploy on Vercel
+## Contributors
+- [Your Name](https://github.com/your-profile)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-<<<<<<< HEAD
->>>>>>> a04f7ce (Initial commit from Create Next App)
-=======
-# BitX
->>>>>>> 485564d (init project)
+## License
+This project is licensed under the MIT License.
+ -->

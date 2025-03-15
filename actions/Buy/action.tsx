@@ -89,7 +89,6 @@ export async function buyCoin(params: { coinId: string; price: number; quantity:
     }
 }
 
-
 export async function sellCoin(params: { coinId: string; price: number; quantity: number }) {
     try {
         const user = await currentUser();

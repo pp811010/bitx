@@ -36,10 +36,11 @@ pnpm i  # or yarn install
 ### 3. Set Up Environment Variables
 สร้างไฟล์ `.env.local` และกำหนดค่าต่อไปนี้(ดูค่า env ในรายงาน):
 ```env
-DATABASE_URL="your_database_url"
-DIRECT_URL="your_direct_database_url"
-NEXT_PUBLIC_COIN_API="your_coingecko_api_key"
-NEXT_PUBLIC_STRIPE_KEY="your_stripe_api_key"
+DATABASE_URL=""
+DIRECT_URL=""
+STRIPE_PUBLIC_KEY = ''
+STRIPE_SECRET_KEY = ''
+NEXT_PUBLIC_DOMAIN=http://localhost:3000
 ```
 
 ### 4. Run Development Server

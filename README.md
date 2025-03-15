@@ -24,7 +24,7 @@ BitX เป็นแพลตฟอร์มที่ช่วยให้ผู
 ## Getting Started
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-repo/bitx.git
+git clone https://github.com/pp811010/bitx.git
 cd bitx
 ```
 

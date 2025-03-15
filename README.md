@@ -12,7 +12,7 @@ BitX เป็นแพลตฟอร์มที่ช่วยให้ผู
 - **Lucide Icons** - สำหรับไอคอนแบบ SVG
 
 ### Backend
-- **Next.js API Routes** - ใช้เป็น backend API
+- **Next.js** - ใช้เป็น Fetching Data in Client Components
 - **Prisma** - ORM สำหรับจัดการฐานข้อมูล
 - **Supabase** - ใช้แทน Firebase สำหรับ authentication และฐานข้อมูล
 

@@ -44,7 +44,7 @@ NEXT_PUBLIC_STRIPE_KEY="your_stripe_api_key"
 
 ### 4. Run Development Server
 ```bash
-npm run dev  # or yarn dev
+npm run dev  # or yarn dev or pnpm run dev
 ```
 เปิดเบราว์เซอร์ที่ [http://localhost:3000](http://localhost:3000) เพื่อดูผลลัพธ์
 

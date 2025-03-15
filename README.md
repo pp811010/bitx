@@ -13,7 +13,6 @@ BitX เป็นแพลตฟอร์มที่ช่วยให้ผู
 
 ### Backend
 - **Next.js** - ใช้เป็น Fetching Data in Client Components
-- **Next.js** - ใช้เป็น Fetching Data in Client Components
 - **Prisma** - ORM สำหรับจัดการฐานข้อมูล
 - **Supabase** - ใช้แทน Firebase สำหรับ authentication และฐานข้อมูล
 

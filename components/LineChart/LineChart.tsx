@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-google-charts";
 
-const LineChart = ({ historicalData }) => {
-    const [data, setData] = useState([["Date", "Prices"]]);
+interface HistoricalData {
+  prices: Array<[string, string]>;
+}
+
+interface LineChartProps {
+  historicalData: HistoricalData | null;
+}
+
+const LineChart: React.FC<LineChartProps> = ({ historicalData }) => {
+  const [data, setData] = useState([["Date", "Prices"]]);
   
     useEffect(() => {
       let dataCopy = [["Date", "Prices"]];

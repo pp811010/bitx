@@ -4,20 +4,38 @@ import { useEffect, useState } from "react";
 import { FetchTransaction } from "@/actions/activity/action";
 import Barcoin from "@/components/Homepage/Barcoin";
 
+interface Asset {
+  id: number;
+  name: string;
+}
+
+interface Transaction {
+  id: number;
+  timestamp: Date;
+  type: "BUY" | "SELL";
+  asset: Asset;
+  quantity: number;
+  price: number;
+  }
+
 const Transactions = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [isBuy, setIsBuy] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchTransactions = async () => {
       const res = await FetchTransaction();
-      setTransactions(res.transaction);
+      if (res?.transaction) {
+        setTransactions(res.transaction);
+      } else {
+        setTransactions([]); // Fallback to empty array if no transaction data
+      }
       setLoading(false);
     };
 
     fetchTransactions();
   }, []);
+
 
   return (
     <div className="mt-[-45px] content2">
@@ -61,14 +79,6 @@ const Transactions = () => {
                       ? `ซื้อ ${transaction.asset.name}`
                       : `ขาย ${transaction.asset.name}`}
                   </h1>
-                  <p
-                    className={`text-sm font-semibold ${transaction.status === "Success"
-                      ? "text-green-500"
-                      : "text-red-500"
-                      }`}
-                  >
-                    {transaction.status}
-                  </p>
                 </div>
 
                 <div className="flex flex-col justify-end text-right">

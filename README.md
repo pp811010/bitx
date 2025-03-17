@@ -12,7 +12,7 @@ BitX แพลตฟอร์มจำลองการซื้อขายเ
 - **Lucide Icons** - สำหรับไอคอนแบบ SVG
 
 ### Backend
-- **Next.js** - ใช้เป็น Fetching Data in Client Components
+- **Next.js** - ใช้เป็น Server Action
 - **Prisma** - ORM สำหรับจัดการฐานข้อมูล
 - **Supabase** - ใช้แทน Firebase สำหรับ authentication และฐานข้อมูล
 

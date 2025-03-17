@@ -8,7 +8,7 @@ import { CoinChart } from "@/data/fetchCoinData";
 import LineChart from "@/components/LineChart/LineChart";
 import { buyCoin, sellCoin } from "@/actions/Buy/action";
 import { toast } from 'react-toastify';
-import Barcoin from "@/components/Homepage/barcoin";
+import Barcoin from "@/components/Homepage/Barcoin";
 import { FetchCash, FetchCoin } from "@/actions/Cash/action";
 import { Button } from "@/components/ui/button"
 import {
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/drawer"
 import { useAuth, useUser } from "@clerk/nextjs";
 import "./page.css"
+
 
 
 

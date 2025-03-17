@@ -1,9 +1,12 @@
 'use server'
 
+import { Asset, BuySellResponse } from "@/utils/allType";
 import db from "@/utils/db";
 import { currentUser } from '@clerk/nextjs/server';
 
-export async function buyCoin(params: { coinId: string; price: number; quantity: number }) {
+
+
+export async function buyCoin(params: { coinId: string; price: number; quantity: number }): Promise<BuySellResponse> {
     try {
         const user = await currentUser();
         if (!user) {
@@ -89,7 +92,7 @@ export async function buyCoin(params: { coinId: string; price: number; quantity:
     }
 }
 
-export async function sellCoin(params: { coinId: string; price: number; quantity: number }) {
+export async function sellCoin(params: { coinId: string; price: number; quantity: number }): Promise<BuySellResponse> {
     try {
         const user = await currentUser();
         if (!user) {
@@ -107,7 +110,7 @@ export async function sellCoin(params: { coinId: string; price: number; quantity
         const { coinId, price, quantity } = params;
         console.log('ขายเหรียญ:', params);
 
-        const existingAsset = await db.asset.findFirst({
+        const existingAsset:Asset | null = await db.asset.findFirst({
             where: {
                 ownerId: getuser.id,
                 name: coinId,
@@ -115,7 +118,7 @@ export async function sellCoin(params: { coinId: string; price: number; quantity
             },
         });
 
-        if (!existingAsset) {
+        if (!existingAsset || existingAsset.quantity === null || existingAsset.quantity === undefined) {
             return { message: "No asset" };
         }
 
@@ -129,6 +132,11 @@ export async function sellCoin(params: { coinId: string; price: number; quantity
         console.log('ค่าใช้จ่ายที่ถูกหัก:', totalSpentdeduct);
 
         await db.$transaction(async (tx) => {
+
+            if (!existingAsset || existingAsset.quantity === null || existingAsset.quantity === undefined) {
+                return { message: "No asset" };
+            }
+
             const newQuantity = existingAsset.quantity - quantity;
             let assetIdForTransaction = existingAsset.id; 
             

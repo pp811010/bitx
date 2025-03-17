@@ -1,15 +1,13 @@
 'use server'
 
 import { FetchCoinData, FetchCoinDataDetail } from "@/data/fetchCoinData";
-import { ErrorResponse, ProfitResult } from "@/utils/allType";
+import { Asset, ErrorResponse, ProfitResult } from "@/utils/allType";
 import db from "@/utils/db";
 import { currentUser } from '@clerk/nextjs/server';
-import { Profit } from '@/components/Profit/Profit';
 
 export async function createCash() {
     try {
         const user = await currentUser();
-        // console.log(user);
         if (!user) {
             return { message: "User not authenticated" };
         }
@@ -52,6 +50,11 @@ export async function createCash() {
 export async function getAllAsset() {
     try {
         const user = await currentUser();
+        
+        if(!user){
+            return { message: 'No user' };
+        }
+
         const profile = await db.profile.findFirst({
             where: {
                 clerkId: user.id
@@ -78,36 +81,40 @@ export async function getAllAsset() {
 }
 
 export async function calProfit(coinName: string): Promise<ProfitResult | ErrorResponse> {
-    console.log('กุส่งออะไรไป' , coinName)
+
     const user = await currentUser();
     if (!user) {
-        return { success: false, errorType: "AUTH_ERROR", message: "User not authenticated" };
+        return { success: false,  message: "User not authenticated" };
     }
 
     const getUser = await db.profile.findFirst({ where: { clerkId: user.id } });
-    console.log(getUser)
+
     
     if (!getUser) {
-        return { success: false, errorType: "PROFILE_NOT_FOUND", message: "User profile not found" };
+        return { success: false, message: "User profile not found" };
     }
 
     const myCoin = await db.asset.findFirst({
         where: { ownerId: getUser.id, name: coinName, deletedAt: null }
     });
 
-    console.log('ควยยย : ',myCoin)
 
     if (!myCoin) {
-        return { success: false, errorType: "ASSET_NOT_FOUND", message: "No asset found or quantity is zero" };
+        return { success: false, message: "No asset found or quantity is zero" };
     }
 
     if (myCoin.totalSpent === 0) {
-        return { success: false, errorType: "INVALID_DATA", message: "Total spent cannot be zero" };
+        return { success: false, message: "Total spent cannot be zero" };
     }
 
     const nowCoin = await FetchCoinDataDetail(coinName);
     if (!nowCoin || !nowCoin.current_price || nowCoin.current_price <= 0) {
-        return { success: false, errorType: "FETCH_ERROR", message: "Failed to fetch valid coin price" };
+        return { success: false, message: "Failed to fetch valid coin price" };
+    }
+    
+
+    if (myCoin.quantity == null) {
+        return { message: 'no myCoin.quantity'}
     }
 
     const avgPriceCoin = myCoin.totalSpent / myCoin.quantity;
@@ -126,7 +133,7 @@ export async function calProfit(coinName: string): Promise<ProfitResult | ErrorR
 }
 
 
-export async function calAssettotal(allAssets) {
+export async function calAssettotal(allAssets: Asset[] ): Promise<{total: number, profitTotal: number, profitTotalPecent: number} | ErrorResponse> {
     try {
         let total_current_price = 0;
         const noCash = allAssets.filter((item) => item.name !== 'Cash');
@@ -136,6 +143,12 @@ export async function calAssettotal(allAssets) {
 
         for (const item of noCash) {
             const current_price = await FetchCoinDataDetail(item.name);
+            if (!current_price || current_price.current_price === null) {
+                return { message: 'no current_price'}
+            }
+            if (item.quantity == null) {
+                return { message: 'no item without cash'}
+            }
             total_current_price += (current_price.current_price * item.quantity);
         }
 

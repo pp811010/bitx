@@ -1,9 +1,10 @@
 'use server'
 
+import { FetchTransactionResponse } from "@/utils/allType";
 import db from "@/utils/db";
 import { currentUser } from '@clerk/nextjs/server';
 
-export async function FetchTransaction () {
+export async function FetchTransaction (): Promise<FetchTransactionResponse>  {
     try {
         const user = await currentUser();
         if (!user) {

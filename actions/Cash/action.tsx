@@ -5,6 +5,8 @@ import { currentUser } from '@clerk/nextjs/server';
 import Stripe from "stripe";
 import { console } from "inspector";
 
+
+
 export async function FetchCash () {
     try {
         const user = await currentUser();

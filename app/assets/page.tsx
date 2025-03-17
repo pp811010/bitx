@@ -2,20 +2,23 @@
 import CoinCard from "@/components/asset/CoinCard"
 import { getAllAsset } from "@/actions/Coin/action"
 import { useEffect, useState } from "react"
-import { UserRound } from 'lucide-react';
+// import { UserRound } from 'lucide-react';
 import BalanceCard from "@/components/asset/BalanceCard";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { CircleUserRound } from 'lucide-react';
+import { Asset, User } from "@/utils/allType";
 
 const Assets = () => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
     const fetchAsset = async () => {
       const response = await getAllAsset()
-      if (response) {
-        setUser(response.result)
+      if (response && response.result) {
+        setUser(response.result) 
         console.log('Fetched assets:', response.result)
+      } else {
+        setUser(null)
       }
     }
     fetchAsset()

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { SignedIn, SignedOut, useAuth } from "@clerk/nextjs";
-import Barcoin from "@/components/Homepage/barcoin";
+import Barcoin from "@/components/Homepage/Barcoin";
 import CoinAllTable from "@/components/Homepage/CoinAllTable";
 import { createProfile } from "@/actions/Profile/action";
 import { createCash } from "@/actions/Coin/action";

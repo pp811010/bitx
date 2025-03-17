@@ -2,7 +2,7 @@
 import { ShoppingCart, HandCoins } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FetchTransaction } from "@/actions/activity/action";
-import Barcoin from "@/components/Homepage/barcoin";
+import Barcoin from "@/components/Homepage/Barcoin";
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);

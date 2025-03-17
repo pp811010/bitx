@@ -16,7 +16,7 @@ const handleSubmit = async (price: number, value: number) => {
             price: price,
             value: value,
         });
-        window.location.href = redirectUrl;
+        window.location.href = redirectUrl ?? '';
     }
     catch (error) {
         console.log("Error adding cash:", error);

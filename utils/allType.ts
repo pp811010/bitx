@@ -24,6 +24,12 @@ export type Asset = {
   deletedAt?: Date | null;
 };
 
+export type User = {
+  firstName: string;
+  lastName: string;
+  assets: Asset[];
+};
+
 export type Transaction = {
   id: number;
   type: "BUY" | "SELL"; 
@@ -57,3 +63,30 @@ export type ProfitResult = {
 export  type ErrorResponse = {
     message: string;
   };
+
+export type AddCashResult = {
+    price?: number;
+    success?: boolean;
+    message?: string;
+    error?: unknown;
+  };
+  
+  export type CreateProfileResult = {
+    success?: boolean;
+    message?: string;
+    profile?: Profile;
+    error?: string;
+    details?: string;
+  };
+
+  export type Profile = {
+    id: number;
+    clerkId: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date | null;
+  };
+  

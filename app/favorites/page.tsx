@@ -1,7 +1,7 @@
 'use client'
 import { getFav, unFav } from "@/actions/Fav/Fav";
 import { FetchCoinData } from '@/data/fetchCoinData'
-import Barcoin from "@/components/Homepage/barcoin";
+import Barcoin from "@/components/Homepage/Barcoin";
 import { MoveDiagonal } from 'lucide-react';
 import { ButtonIconFav } from "@/components/ui/ButtonIconFav";
 import {
@@ -14,9 +14,19 @@ import {
 } from "@/components/ui/table"
 import { useEffect, useState } from "react";
 import Link from "next/link";
+type Coin = {
+    id: string;
+    name: string;
+    symbol: string;
+    image: string;
+    current_price: number;
+    price_change_percentage_24h: number;
+    market_cap: number;
+};
 
+type FavCoin = Coin;
 const page = () => {
-    const [fav, setFav] = useState([]);
+    const [fav, setFav] = useState<FavCoin[]>([]);
     const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
@@ -24,7 +34,7 @@ const page = () => {
             setLoading(true); // เริ่มโหลดข้อมูล
             try {
                 let favdata = await getFav();
-                const favdatanew = favdata.map(item => item.coinName);
+                const favdatanew = favdata.map((item: { coinName: string }) => item.coinName);
                 
                 const alldata = await FetchCoinData();
                 if (favdata && alldata) {

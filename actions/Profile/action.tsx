@@ -2,8 +2,9 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import db from "@/utils/db";
+import { CreateProfileResult } from "@/utils/allType";
 
-export async function createProfile() {
+export async function createProfile(): Promise<CreateProfileResult> {
   try {
     const user = await currentUser();
     if (!user) return { error: "User not found" };
@@ -24,9 +25,13 @@ export async function createProfile() {
       data: { clerkId: user.id, firstName, lastName, email },
     });
 
-    return { message: "Profile created", profile };
+    return { success: true, message: "Profile created", profile };
   } catch (error) {
-    console.error("Error creating profile:", error.message || error);
-    return { error: "Something went wrong", details: error.message };
+    if (error instanceof Error) {
+      console.error("Error creating profile:", error.message);
+      return { success: false, error: "Something went wrong", details: error.message };
+    }
+    console.error("Unknown error:", error);
+    return { success: false, error: "Unknown error", details: String(error) };
   }
 }

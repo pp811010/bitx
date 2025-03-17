@@ -11,16 +11,16 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from "../ui/button";
 import Link from "next/link";
 
-import {  ProfitResult } from "@/utils/allType";
+import {  ProfitResult,   } from "@/utils/allType";
 
 
 const CoinCard = (props: any) => {
   const { data } = props;
   const [coindetail, setCoindetail] = useState<any>(' ');
-  const [view, setView] = useState(false);
-  const [profit, setProfit] = useState(0);
-  const [profitPercent, setProfitPercent] = useState(0);
-  const [alldetail, setAllDetail] = useState<ProfitResult | ErrorResponse |null>(null);
+  const [view, setView] = useState<boolean>(false);
+  const [profit, setProfit] = useState<number>(0);
+  const [profitPercent, setProfitPercent] = useState<number>(0);
+  const [alldetail, setAllDetail] = useState<ProfitResult  | null>(null);
 
   interface CoinData {
   name: string;

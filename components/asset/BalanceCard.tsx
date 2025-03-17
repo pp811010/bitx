@@ -1,18 +1,18 @@
 import { calAssettotal } from "@/actions/Coin/action";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
-import { CirclePlus } from 'lucide-react';
-import Link from 'next/link';
+import { CirclePlus } from "lucide-react";
+import Link from "next/link";
+import { Asset } from "@/utils/allType";
 
-const BalanceCard = ({ allMyAssets = [] }) => {
-  const [balance, setBalance] = useState(0);
-  const [profit, setProfit] = useState(0);
-  const [profitPercent, setProfitPercent] = useState(0);
+type BalanceCardProps = {
+  allMyAssets?: Asset[];
+};
+
+function BalanceCard({ allMyAssets = [] }: BalanceCardProps) {
+  const [balance, setBalance] = useState<number>(0);
+  const [profit, setProfit] = useState<number>(0);
+  const [profitPercent, setProfitPercent] = useState<number>(0);
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -23,13 +23,18 @@ const BalanceCard = ({ allMyAssets = [] }) => {
         return;
       }
 
-      const { total, profitTotal, profitTotalPecent } = await calAssettotal(allMyAssets);
-      
-      setBalance(total);
-      setProfit(profitTotal);
-      setProfitPercent(profitTotalPecent);
-      
-      console.log("Total Balance:", total);
+      try {
+        const response = await calAssettotal(allMyAssets);
+        if ("message" in response) {
+          console.log("Error total assets : ", response.message);
+        } else {
+          setBalance(response.total);
+          setProfit(response.profitTotal);
+          setProfitPercent(response.profitTotalPercent);
+        }
+      } catch (error) {
+        console.error("Error fetching balance:", error);
+      }
     };
 
     fetchBalance();
@@ -53,12 +58,14 @@ const BalanceCard = ({ allMyAssets = [] }) => {
         <CardDescription>
           <div className="flex items-center justify-between">
             <CardDescription className="text-xl my-3 text-center w-full font-normal">
-              {parseFloat(balance).toFixed(2).toLocaleString()} THB 
+              {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })} THB
               {allMyAssets.length !== 1 && (
-                <span className={`ml-2 ${profit >= 0 ? "text-green-400" : "text-red-400"}`}>
+                <span
+                  className={`ml-2 ${profit >= 0 ? "text-green-400" : "text-red-400"}`}
+                >
                   {profit >= 0
-                    ? `+${parseFloat(profit).toFixed(2).toLocaleString()} (${parseFloat(profitPercent).toFixed(2).toLocaleString()}%)`
-                    : `${parseFloat(profit).toFixed(2).toLocaleString()} (${parseFloat(profitPercent).toFixed(2).toLocaleString()}%)`}
+                    ? `+${profit.toLocaleString(undefined, { minimumFractionDigits: 2 })} (${profitPercent.toLocaleString(undefined, { minimumFractionDigits: 2 })}%)`
+                    : `${profit.toLocaleString(undefined, { minimumFractionDigits: 2 })} (${profitPercent.toLocaleString(undefined, { minimumFractionDigits: 2 })}%)`}
                 </span>
               )}
             </CardDescription>
@@ -67,6 +74,6 @@ const BalanceCard = ({ allMyAssets = [] }) => {
       </CardHeader>
     </Card>
   );
-};
+}
 
 export default BalanceCard;

@@ -7,17 +7,18 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Flame } from 'lucide-react';
+import { Coin } from "@/utils/allType";
 
 
 
 export default function HotCard() {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Coin[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             const coin = await FetchCoinData();
     
-            const top8 = coin
+            const top8: Coin[] = coin
                 .sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)
                 .slice(0, 8);
     
@@ -34,7 +35,7 @@ export default function HotCard() {
                 <Flame className="text-red-700" />
             </div>
             <div className="mt-3 grid grid-flow-col grid-rows-4 gap-x-5">
-                {data.map((coin, index) => (
+                {data.map((coin: Coin, index: number) => (
                     <Link key={index} href={`/coin/${coin.id}`} passHref>
                         <div key={index} className={` flex justify-between items-center py-2  transition-all duration-300 cursor-pointer hover:scale-105 hover:bg-[#fffbe4] hover:px-2 hover:rounded-xl `}>
                             <div className="w-full text-right flex justify-between">

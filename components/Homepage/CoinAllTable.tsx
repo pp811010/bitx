@@ -14,7 +14,7 @@
 
   export default function CoinAllTable() {
     const [coin, setCoin] = useState<Coin[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 20;
     const [filterCoins, setFilterCoins] = useState<Coin[]>([]);
     const [choose, setChoose] = useState(true);
@@ -31,7 +31,9 @@
           const favData = await getFav();
           if (favData) {
             console.log('favData', favData);
-            setFavCoins(favData.map((fav: any) => fav.coinName)); 
+            if (Array.isArray(favData)) {
+              setFavCoins(favData.map((fav: any) => fav.coinName));
+            }
             console.log('FavCoin ::: ', favCoins)
           }
         } catch (error) {
@@ -136,7 +138,7 @@
             </TableRow>
           </TableHeader>
           <TableBody>
-            {(choose ? currentData : favoriteData).map((item) => (
+            {(choose ? currentData : favoriteData).map((item: Coin) => (
               <TableRow key={item.id} className="text-center border-none rounded-lg">
                 <TableCell>
                   <div className='flex justify-start'>

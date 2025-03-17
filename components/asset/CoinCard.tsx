@@ -10,37 +10,40 @@ import { calProfit } from "@/actions/Coin/action";
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from "../ui/button";
 import Link from "next/link";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
+
+import {  ProfitResult } from "@/utils/allType";
 
 
-const CoinCard = (props) => {
+const CoinCard = (props: any) => {
   const { data } = props;
-  const [coindetail, setCoindetail] = useState(' ');
+  const [coindetail, setCoindetail] = useState<any>(' ');
   const [view, setView] = useState(false);
   const [profit, setProfit] = useState(0);
   const [profitPercent, setProfitPercent] = useState(0);
-  const [alldetail, setAllDetail] = useState(null);
+  const [alldetail, setAllDetail] = useState<ProfitResult | ErrorResponse |null>(null);
+
+  interface CoinData {
+  name: string;
+  totalSpent: number;
+}
+
+
 
   useEffect(() => {
     const fetchData = async () => {
       if (data.name !== "Cash") {
-        const detail = await FetchCoinDataDetail(data.name);
+        const detail = await FetchCoinDataDetail(data.name)
         setCoindetail(detail);
 
 
-        const profitData = await calProfit(data.name);
-        setAllDetail(profitData)
-        setProfit(profitData.resultProfit);
-        setProfitPercent(profitData.resultProfitPercent);
+        const profitData  = await calProfit(data.name)
+        if ('message' in profitData) {
+          console.log(profitData.message); 
+        } else {
+          setAllDetail(profitData);
+          setProfit(profitData.resultProfit);
+          setProfitPercent(profitData.resultProfitPercent);
+        }     
       }
     };
     fetchData();
@@ -96,7 +99,7 @@ const CoinCard = (props) => {
             </CardDescription>
           </CardHeader>
 
-          {view && (
+          {view && alldetail && (
               <div className={`mt-4 p-4 border-t transition-height ${view ? 'open' : ''}`}>
                 
                       <p>Detail : {data.name.charAt(0).toUpperCase() + data.name.slice(1)}</p>

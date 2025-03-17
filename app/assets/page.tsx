@@ -2,9 +2,7 @@
 import CoinCard from "@/components/asset/CoinCard"
 import { getAllAsset } from "@/actions/Coin/action"
 import { useEffect, useState } from "react"
-// import { UserRound } from 'lucide-react';
 import BalanceCard from "@/components/asset/BalanceCard";
-// import { Button } from "@/components/ui/button";
 import { CircleUserRound } from 'lucide-react';
 import { Asset, User } from "@/utils/allType";
 

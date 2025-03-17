@@ -45,18 +45,22 @@ export type Transaction = {
 export interface Coin {
     id: string
     name: string
+    image: string
     symbol: string
     current_price: number
+    market_cap: number
+    price_change_percentage_24h : number
+    
 }
 
 export type ProfitResult = {
-  myCoin?: Asset;
-  avgPriceCoin?: number;      
-  hasPriceNow?: number;       
-  hasPriceHold?: number;      
-  resultProfit?: number;      
-  resultProfitPercent?: number;
-  success? : boolean
+  myCoin: Asset;
+  avgPriceCoin: number;      
+  hasPriceNow: number;       
+  hasPriceHold: number;      
+  resultProfit: number;      
+  resultProfitPercent: number;
+  success : boolean
 };
 
 
@@ -89,4 +93,8 @@ export type AddCashResult = {
     updatedAt: Date;
     deletedAt?: Date | null;
   };
+
+
+  export type Assettotal =   { total: number; profitTotal: number; profitTotalPercent: number }
+
   

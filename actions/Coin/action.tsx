@@ -1,9 +1,10 @@
 'use server'
 
 import { FetchCoinData, FetchCoinDataDetail } from "@/data/fetchCoinData";
-import { Asset, ErrorResponse, ProfitResult } from "@/utils/allType";
+import { Asset, Assettotal, ErrorResponse, ProfitResult } from "@/utils/allType";
 import db from "@/utils/db";
 import { currentUser } from '@clerk/nextjs/server';
+
 
 export async function createCash() {
     try {
@@ -133,43 +134,52 @@ export async function calProfit(coinName: string): Promise<ProfitResult | ErrorR
 }
 
 
-export async function calAssettotal(allAssets: Asset[] ): Promise<{total: number, profitTotal: number, profitTotalPecent: number} | ErrorResponse> {
+export async function calAssettotal(allAssets: Asset[]): Promise<Assettotal | ErrorResponse> {
     try {
-        let total_current_price = 0;
-        const noCash = allAssets.filter((item) => item.name !== 'Cash');
-        const Cash = allAssets.filter((item) => item.name === 'Cash');
-
-        const totalSpent = noCash.reduce((result, item) => result + item.totalSpent, 0);
-
-        for (const item of noCash) {
-            const current_price = await FetchCoinDataDetail(item.name);
-            if (!current_price || current_price.current_price === null) {
-                return { message: 'no current_price'}
-            }
-            if (item.quantity == null) {
-                return { message: 'no item without cash'}
-            }
-            total_current_price += (current_price.current_price * item.quantity);
+      let totalCurrentPrice = 0;
+      
+      let totalSpent = 0;
+      let cashAmount = 0;
+      const nonCashAssets: Asset[] = [];
+  
+      for (const item of allAssets) {
+        if (item.name === "Cash") {
+          cashAmount += item.totalSpent || 0;
+        } else {
+          totalSpent += item.totalSpent || 0;
+          nonCashAssets.push(item);
         }
+      }
+  
 
-        const profitTotal = total_current_price - totalSpent;
-        const profitTotalPecent = totalSpent > 0 ? (profitTotal / totalSpent) * 100 : 0;
-
-        const total = totalSpent + (Cash[0]?.totalSpent || 0);
-
-        return {
-            total: Number(total),
-            profitTotal: Number(profitTotal),
-            profitTotalPecent: Number(profitTotalPecent),
-          };
-          
+      for (const item of nonCashAssets) {
+        const currentPriceData = await FetchCoinDataDetail(item.name);
+        
+        if (!currentPriceData || currentPriceData.current_price === null) {
+          return { message: "No current price available" };
+        }
+        
+        if (item.quantity == null) {
+          return { message: "Invalid asset quantity" };
+        }
+  
+        totalCurrentPrice += currentPriceData.current_price * item.quantity;
+      }
+  
+      const profitTotal = totalCurrentPrice - totalSpent;
+      const profitTotalPercent = totalSpent > 0 ? (profitTotal / totalSpent) * 100 : 0;
+  
+      const total = totalSpent + cashAmount;
+  
+      return {
+        total: Number(total.toFixed(2)),
+        profitTotal: Number(profitTotal.toFixed(2)),
+        profitTotalPercent: Number(profitTotalPercent.toFixed(2)),
+      };
     } catch (error) {
-        console.log("Error calculating total assets:", error);
-        return {
-            total: 0,
-            profitTotal: 0,
-            profitTotalPecent: 0
-        };
+      console.error("Error calculating total assets:", error);
+      return { message: "Error calculating total assets" };
     }
-}
+  }
+  
 

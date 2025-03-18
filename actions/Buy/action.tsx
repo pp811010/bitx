@@ -131,7 +131,7 @@ export async function sellCoin(params: { coinId: string; price: number; quantity
         console.log('กำไร:', profit);
         console.log('ค่าใช้จ่ายที่ถูกหัก:', totalSpentdeduct);
 
-        await db.$transaction(async (tx) => {
+        await db.$transaction(async (tx: any) => {
 
             if (!existingAsset || existingAsset.quantity === null || existingAsset.quantity === undefined) {
                 return { message: "No asset" };

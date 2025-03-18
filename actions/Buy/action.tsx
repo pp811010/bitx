@@ -3,6 +3,7 @@
 import { Asset, BuySellResponse } from "@/utils/allType";
 import db from "@/utils/db";
 import { currentUser } from '@clerk/nextjs/server';
+import { Prisma } from "@prisma/client";
 
 
 
@@ -110,7 +111,7 @@ export async function sellCoin(params: { coinId: string; price: number; quantity
         const { coinId, price, quantity } = params;
         console.log('ขายเหรียญ:', params);
 
-        const existingAsset:Asset | null = await db.asset.findFirst({
+        const existingAsset: Asset | null = await db.asset.findFirst({
             where: {
                 ownerId: getuser.id,
                 name: coinId,
@@ -118,7 +119,7 @@ export async function sellCoin(params: { coinId: string; price: number; quantity
             },
         });
 
-        if (!existingAsset || existingAsset.quantity === null || existingAsset.quantity === undefined) {
+        if (!existingAsset || existingAsset.quantity == null) {
             return { message: "No asset" };
         }
 
@@ -126,42 +127,28 @@ export async function sellCoin(params: { coinId: string; price: number; quantity
             return { message: "เหรียญไม่พอ" };
         }
 
+        // คำนวณต้นทุนและกำไร
         const totalSpentdeduct = (existingAsset.totalSpent / existingAsset.quantity) * quantity;
         const profit = (price * quantity) - totalSpentdeduct;
+
         console.log('กำไร:', profit);
         console.log('ค่าใช้จ่ายที่ถูกหัก:', totalSpentdeduct);
 
-        await db.$transaction(async (tx: any) => {
-
-            if (!existingAsset || existingAsset.quantity === null || existingAsset.quantity === undefined) {
-                return { message: "No asset" };
-            }
-
+        await db.$transaction(async (tx: Prisma.TransactionClient) => {
             const newQuantity = existingAsset.quantity - quantity;
-            let assetIdForTransaction = existingAsset.id; 
-            
-            if (newQuantity <= 0) {
-                console.log('เข้าอันเเรก', newQuantity)
-                await tx.asset.update({
-                    where: { id: existingAsset.id, deletedAt: null },
-                    data: { 
-                        quantity: newQuantity,
-                        totalSpent: existingAsset.totalSpent - totalSpentdeduct,
-                        deletedAt: new Date() 
-                    },
-                });
+            const assetIdForTransaction = existingAsset.id;
 
-            } else {
-                await tx.asset.update({
-                    where: { id: existingAsset.id, deletedAt: null },
-                    data: {
-                        quantity: newQuantity,
-                        totalSpent: existingAsset.totalSpent - totalSpentdeduct,
-                        deletedAt: null
-                    },
-                });
-            }
+            // อัปเดตสินทรัพย์ที่ขาย
+            await tx.asset.update({
+                where: { id: existingAsset.id, deletedAt: null },
+                data: {
+                    quantity: newQuantity,
+                    totalSpent: existingAsset.totalSpent - totalSpentdeduct,
+                    deletedAt: newQuantity <= 0 ? new Date() : null,
+                },
+            });
 
+            // อัปเดตยอดเงินสด
             await tx.asset.update({
                 where: {
                     ownerId_name: {
@@ -181,8 +168,8 @@ export async function sellCoin(params: { coinId: string; price: number; quantity
                     type: "SELL",
                     profileId: getuser.id,
                     assetId: assetIdForTransaction,
-                    quantity: Number(quantity),
-                    price: Number(totalSpentdeduct + profit)
+                    quantity: quantity,
+                    price: totalSpentdeduct + profit,
                 },
             });
         });
@@ -193,7 +180,3 @@ export async function sellCoin(params: { coinId: string; price: number; quantity
         return { error };
     }
 }
-
-
-
-
